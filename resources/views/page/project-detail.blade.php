@@ -5,7 +5,7 @@
 @section('content')
 <div class="container flex-grow-1">
     <div class="card shadow-sm border-0 mx-auto" style="max-width: 800px;">
-        <img src="{{ asset('images/'.Str::replaceLast('.jgp', '.jpg', $project->image)) }}" alt="{{ $project->title }}" class="card-img-top"
+        <img src="{{ str_starts_with($project->image ?? '', 'http') ? $project->image : (str_contains($project->image ?? '', '/') ? asset('storage/' . $project->image) : asset('images/' . Str::replaceLast('.jgp', '.jpg', $project->image))) }}" alt="{{ $project->title }}" class="card-img-top"
             style="max-height: 400px; object-fit: cover;">
         <div class="card-body">
             <h2 class="card-title">{{ $project->title }}</h2>

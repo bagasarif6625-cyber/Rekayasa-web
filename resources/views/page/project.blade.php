@@ -14,7 +14,7 @@
 
         <div class="col-md-4">
             <div class="card h-100 shadow-sm border-0">
-                <img src="{{ asset('images/'.Str::replaceLast('.jgp', '.jpg', $project->image)) }}" alt="" class="card-img-top"
+                <img src="{{ str_starts_with($project->image ?? '', 'http') ? $project->image : (str_contains($project->image ?? '', '/') ? asset('storage/' . $project->image) : asset('images/' . Str::replaceLast('.jgp', '.jpg', $project->image))) }}" alt="" class="card-img-top"
                     style="height: 200px; object-fit: cover;">
                 <div class="card-body">
                     <h5 class="card-title mb-4">{{ $project->title }}</h5>
