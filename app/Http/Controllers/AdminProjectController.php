@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,12 +29,12 @@ class AdminProjectController extends Controller
             ->paginate($perPage)
             ->withQueryString();
 
-        return view('admin.projects.index', compact('projects', 'perPage', 'search'));
+        return view('projects.index', compact('projects', 'perPage', 'search'));
     }
 
     public function create()
     {
-        return view('admin.projects.create', ['project' => new Project(), 'action' => 'Tambah']);
+        return view('projects.create', ['project' => new Project(), 'action' => 'Tambah']);
     }
 
     public function store(Request $request)
@@ -49,7 +50,7 @@ class AdminProjectController extends Controller
 
     public function edit(Project $project)
     {
-        return view('admin.projects.create', compact('project') + ['action' => 'Edit']);
+        return view('projects.edit', compact('project'));
     }
 
     public function update(Request $request, Project $project)
@@ -87,5 +88,13 @@ class AdminProjectController extends Controller
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
             'status' => ['required', 'string', 'in:active,archived,Selesai,In Progress'],
         ]);
+    }
+
+    public function cetakPdf()
+    {
+        $projects = Project::all();
+        $pdf = Pdf::loadView('projects.pdf', compact('projects'));
+
+        return $pdf->stream('projects.pdf');
     }
 }

@@ -29,9 +29,12 @@ Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')-
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [AdminProjectController::class, 'index'])->name('admin.home');
     Route::get('/projects', [AdminProjectController::class, 'index'])->name('admin.projects.index');
-    Route::get('/projects/create', [AdminProjectController::class, 'create'])->name('admin.projects.create');
+    Route::get('/projects/create', [AdminProjectController::class, 'create'])->name('projects.create');
     Route::post('/projects', [AdminProjectController::class, 'store'])->name('admin.projects.store');
     Route::get('/projects/{project}/edit', [AdminProjectController::class, 'edit'])->name('admin.projects.edit');
     Route::put('/projects/{project}', [AdminProjectController::class, 'update'])->name('admin.projects.update');
     Route::delete('/projects/{project}', [AdminProjectController::class, 'destroy'])->name('admin.projects.destroy');
+    Route::get('/projects/cetak-pdf', [AdminProjectController::class, 'cetakPdf'])->name('admin.projects.cetak-pdf');
+
+    Route::get('/projects/pdf', [AdminProjectController::class, 'cetakPdf'])->name('projects.pdf');
 });

@@ -5,7 +5,12 @@
 @section('content')
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
         <h1 class="h3 mb-0">Data Projects</h1>
-        <a href="{{ route('admin.projects.create') }}" class="btn btn-primary">Tambah Project</a>
+        <header class="justify-content-end">
+            <a href="{{ route('projects.create') }}" class="btn btn-primary">Tambah Project</a>
+            <a href="{{ route('projects.pdf') }}" class="btn btn-danger" target="_blank">Cetak PDF</a>
+        </header>
+        
+        
     </div>
 
     @if (session('success'))

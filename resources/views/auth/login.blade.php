@@ -67,6 +67,8 @@
                     <label class="form-label" for="password">Password</label>
                     <input class="form-control @error('password') is-invalid @enderror" id="password" name="password" type="password" autocomplete="current-password" required>
                 </div>
+                <h20>Username : admin@example.com </h20>
+                <h20>Password : password </h20>
                 <div class="form-check mb-3">
                     <input class="form-check-input" id="remember" name="remember" type="checkbox" value="1" @checked(old('remember'))>
                     <label class="form-check-label remember-label" for="remember">Ingat saya</label>
