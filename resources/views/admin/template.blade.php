@@ -68,6 +68,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/') }}">Lihat Website</a>
                 </li>
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="nav-link border-0 bg-transparent" type="submit">Logout</button>
+                    </form>
+                </li>
             </ul>
         </div>
         <!-- </div> -->
