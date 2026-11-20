@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\AdminProjectController;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,9 +22,9 @@ Route::get('/profile', [MahasiswaController::class, 'index']);
 Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
 Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project.show');
 
-Route::get('/login', [LoginController::class, 'create'])->name('login');
-Route::post('/login', [LoginController::class, 'store'])->name('login.store');
-Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
+Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AdminAuthController::class, 'login'])->name('login.store');
+Route::post('/logout', [AdminAuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [AdminProjectController::class, 'index'])->name('admin.home');

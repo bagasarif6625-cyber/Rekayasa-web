@@ -12,7 +12,7 @@ class AdminProjectController extends Controller
     public function index()
     {
         $perPage = (int) request('per_page', 10);
-        if (!in_array($perPage, [10, 25, 50], true)) {
+        if (! in_array($perPage, [10, 25, 50], true)) {
             $perPage = 10;
         }
         $search = trim((string) request('search', ''));
@@ -29,12 +29,12 @@ class AdminProjectController extends Controller
             ->paginate($perPage)
             ->withQueryString();
 
-        return view('projects.index', compact('projects', 'perPage', 'search'));
+        return view('admin.projects.index', compact('projects', 'perPage', 'search'));
     }
 
     public function create()
     {
-        return view('projects.create', ['project' => new Project(), 'action' => 'Tambah']);
+        return view('admin.projects.create', ['project' => new Project, 'action' => 'Tambah']);
     }
 
     public function store(Request $request)
@@ -50,14 +50,14 @@ class AdminProjectController extends Controller
 
     public function edit(Project $project)
     {
-        return view('projects.edit', compact('project'));
+        return view('admin.projects.edit', compact('project'));
     }
 
     public function update(Request $request, Project $project)
     {
         $data = $this->validatedData($request);
         if ($request->hasFile('image')) {
-            if ($project->image && !str_starts_with($project->image, 'http')) {
+            if ($project->image && ! str_starts_with($project->image, 'http')) {
                 Storage::disk('public')->delete($project->image);
             }
             $data['image'] = $request->file('image')->store('projects', 'public');
@@ -71,7 +71,7 @@ class AdminProjectController extends Controller
 
     public function destroy(Project $project)
     {
-        if ($project->image && !str_starts_with($project->image, 'http')) {
+        if ($project->image && ! str_starts_with($project->image, 'http')) {
             Storage::disk('public')->delete($project->image);
         }
         $project->delete();
@@ -93,7 +93,7 @@ class AdminProjectController extends Controller
     public function cetakPdf()
     {
         $projects = Project::all();
-        $pdf = Pdf::loadView('projects.pdf', compact('projects'));
+        $pdf = Pdf::loadView('admin.projects.pdf', compact('projects'));
 
         return $pdf->stream('projects.pdf');
     }
