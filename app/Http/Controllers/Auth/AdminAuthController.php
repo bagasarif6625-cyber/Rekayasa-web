@@ -31,11 +31,16 @@ class AdminAuthController extends Controller
 
         $request->session()->regenerate();
 
+        $user = Auth::user();
+        $token = $user->createToken('web-session')->plainTextToken;
+        $request->session()->put('api_token', $token);
+
         return redirect()->intended(route('admin.home'));
     }
 
     public function logout(Request $request)
     {
+        $request->user()?->currentAccessToken()?->delete();
         Auth::logout();
 
         $request->session()->invalidate();

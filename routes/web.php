@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminProjectController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MahasiswaController;
@@ -28,6 +29,7 @@ Route::post('/logout', [AdminAuthController::class, 'logout'])->middleware('auth
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [AdminProjectController::class, 'index'])->name('admin.home');
+    Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
     Route::get('/projects', [AdminProjectController::class, 'index'])->name('admin.projects.index');
     Route::get('/projects/create', [AdminProjectController::class, 'create'])->name('projects.create');
     Route::post('/projects', [AdminProjectController::class, 'store'])->name('admin.projects.store');

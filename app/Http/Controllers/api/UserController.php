@@ -4,16 +4,18 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
         $users = User::all();
 
         return response()->json(
@@ -29,16 +31,15 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        //
         $validate = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string',
-            'phone' => 'nullable|string',
-            'address' => 'nullable|string',
-            'role' => 'nullable|string',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8'],
+            'phone' => ['nullable', 'string', 'max:30'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'role' => ['nullable', 'string', 'max:50'],
         ]);
 
         $validate['password'] = bcrypt($validate['password']);
@@ -57,7 +58,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         //
         try {
@@ -70,12 +71,11 @@ class UserController extends Controller
                     'data' => $user,
                 ], 200
             );
-        } catch (\Exception $e) {
+        } catch (ModelNotFoundException) {
             return response()->json(
                 [
                     'success' => false,
                     'message' => 'Data user tidak ditemukan',
-                    'error' => $e->getMessage(),
                 ], 404
             );
         }
@@ -84,22 +84,24 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): JsonResponse
     {
         //
         try {
             $user = User::findOrFail($id);
 
             $validate = $request->validate([
-                'name' => 'nullable|string|max:255',
-                'email' => 'nullable|string|email|max:255|unique:users,email,'.$user->id,
-                'password' => 'nullable|string',
-                'phone' => 'nullable|string',
-                'address' => 'nullable|string',
-                'role' => 'nullable|string',
+                'name' => ['sometimes', 'required', 'string', 'max:255'],
+                'email' => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+                'password' => ['sometimes', 'nullable', 'string', 'min:8'],
+                'phone' => ['sometimes', 'nullable', 'string', 'max:30'],
+                'address' => ['sometimes', 'nullable', 'string', 'max:255'],
+                'role' => ['sometimes', 'nullable', 'string', 'max:50'],
             ]);
-            if (isset($validate['password'])) {
+            if (! empty($validate['password'])) {
                 $validate['password'] = bcrypt($validate['password']);
+            } else {
+                unset($validate['password']);
             }
 
             $user->update($validate);
@@ -111,12 +113,11 @@ class UserController extends Controller
                     'data' => $user,
                 ], 200
             );
-        } catch (\Exception $e) {
+        } catch (ModelNotFoundException) {
             return response()->json(
                 [
                     'success' => false,
                     'message' => 'Data user tidak ditemukan',
-                    'error' => $e->getMessage(),
                 ], 404
             );
         }
@@ -125,7 +126,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         //
         try {
@@ -138,12 +139,11 @@ class UserController extends Controller
                     'message' => 'Data user berhasil dihapus',
                 ], 200
             );
-        } catch (\Exception $e) {
+        } catch (ModelNotFoundException) {
             return response()->json(
                 [
                     'success' => false,
                     'message' => 'Data user tidak ditemukan',
-                    'error' => $e->getMessage(),
                 ], 404
             );
         }

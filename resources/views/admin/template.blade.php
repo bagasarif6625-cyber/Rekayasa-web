@@ -84,6 +84,7 @@
     <div class="sidebar shadow-sm">
         <h5 class="text-center text-white py-3">Admin Menu</h5>
         <a href="{{ route('admin.home') }}">Dashboard</a>
+        <a href="{{ route('admin.users.index') }}">Data User</a>
         <a href="{{ route('admin.projects.index') }}">Data Project</a>
     </div>
 
